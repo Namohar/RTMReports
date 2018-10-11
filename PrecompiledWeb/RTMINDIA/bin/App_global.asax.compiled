@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<preserve resultType="8" virtualPath="/RTMINDIA/global.asax" hash="ffffffffcd9b376a" filehash="410ccf31eaac" flags="150000" assembly="App_global.asax" type="ASP.global_asax">
+    <filedeps>
+        <filedep name="/RTMINDIA/global.asax" />
+    </filedeps>
+</preserve>

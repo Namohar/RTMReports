@@ -1,0 +1,15 @@
+C:\Users\Mohammed.Shiddique\Desktop\EMS\RTM Reports Portal - Global\RTMReports\BAL\bin\Release\BAL.dll
+C:\Users\Mohammed.Shiddique\Desktop\EMS\RTM Reports Portal - Global\RTMReports\BAL\bin\Release\BAL.pdb
+C:\Users\Mohammed.Shiddique\Desktop\EMS\RTM Reports Portal - Global\RTMReports\BAL\bin\Release\DAL.dll
+C:\Users\Mohammed.Shiddique\Desktop\EMS\RTM Reports Portal - Global\RTMReports\BAL\bin\Release\DAL.pdb
+C:\Users\Mohammed.Shiddique\Desktop\EMS\RTM Reports Portal - Global\RTMReports\BAL\obj\Release\BAL.csprojResolveAssemblyReference.cache
+C:\Users\Mohammed.Shiddique\Desktop\EMS\RTM Reports Portal - Global\RTMReports\BAL\obj\Release\BAL.dll
+C:\Users\Mohammed.Shiddique\Desktop\EMS\RTM Reports Portal - Global\RTMReports\BAL\obj\Release\BAL.pdb
+D:\EMS\RTM Reports Portal - Global\RTMReports\BAL\bin\Release\BAL.dll
+D:\EMS\RTM Reports Portal - Global\RTMReports\BAL\bin\Release\BAL.pdb
+D:\EMS\RTM Reports Portal - Global\RTMReports\BAL\bin\Release\DAL.dll
+D:\EMS\RTM Reports Portal - Global\RTMReports\BAL\bin\Release\DAL.pdb
+D:\EMS\RTM Reports Portal - Global\RTMReports\BAL\obj\Release\BAL.csprojResolveAssemblyReference.cache
+D:\EMS\RTM Reports Portal - Global\RTMReports\BAL\obj\Release\BAL.dll
+D:\EMS\RTM Reports Portal - Global\RTMReports\BAL\obj\Release\BAL.pdb
+D:\EMS\RTM Reports Portal - Global\RTMReports\BAL\bin\Release\MySql.Data.dll

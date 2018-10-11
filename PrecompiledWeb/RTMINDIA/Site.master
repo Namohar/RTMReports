@@ -1,0 +1,351 @@
+﻿<%@ master language="C#" autoeventwireup="true" inherits="Site, App_Web_gr024rh5" %>
+
+<!DOCTYPE html>
+<html>
+
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RTM Reports</title>
+    <!-- Bootstrap Styles-->
+    <link href="assets/css/bootstrap.css" rel="stylesheet" />
+    <!-- FontAwesome Styles-->
+    <link href="assets/css/font-awesome.css" rel="stylesheet" />
+    <!-- Morris Chart Styles-->
+    <link href="assets/js/morris/morris-0.4.3.min.css" rel="stylesheet" />
+    <!-- Custom Styles-->
+    <link href="assets/css/custom-styles.css" rel="stylesheet" />
+
+    <!-- Google Fonts-->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css" />
+     <script src="http://code.jquery.com/jquery-1.10.2.js" type="text/javascript"></script>
+    <script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js" type="text/javascript"></script>
+    
+    <style>
+          .lite{
+         color: #00a0df !important;
+          }
+    </style>
+    
+   <%-- <script type="text/javascript">
+        function calculate_time_zone() {
+            var rightNow = new Date();
+            var jan1 = new Date(rightNow.getFullYear(), 0, 1, 0, 0, 0, 0);  // jan 1st
+            var june1 = new Date(rightNow.getFullYear(), 6, 1, 0, 0, 0, 0); // june 1st
+            var temp = jan1.toGMTString();
+            var jan2 = new Date(temp.substring(0, temp.lastIndexOf(" ") - 1));
+            temp = june1.toGMTString();
+            var june2 = new Date(temp.substring(0, temp.lastIndexOf(" ") - 1));
+            var std_time_offset = (jan1 - jan2) / (1000 * 60 * 60);
+            var daylight_time_offset = (june1 - june2) / (1000 * 60 * 60);
+            var dst;
+            if (std_time_offset == daylight_time_offset) {
+                dst = "0"; // daylight savings time is NOT observed
+            } else {
+                // positive is southern, negative is northern hemisphere
+                var hemisphere = std_time_offset - daylight_time_offset;
+                if (hemisphere >= 0)
+                    std_time_offset = daylight_time_offset;
+                dst = "1"; // daylight savings time is observed
+            }
+
+            var timezone = convert(std_time_offset);
+
+            //document.getElementById('<%=timezone.ClientID%>').innerHTML = timezone
+        }
+
+        function convert(value) {
+            var hours = parseInt(value);
+            value -= parseInt(value);
+            value *= 60;
+            var mins = parseInt(value);
+            value -= parseInt(value);
+            value *= 60;
+            var secs = parseInt(value);
+            var display_hours = hours;
+            // handle GMT case (00:00)
+            if (hours == 0) {
+                display_hours = "00";
+            } else if (hours > 0) {
+                // add a plus sign and perhaps an extra 0
+                display_hours = (hours < 10) ? "+0" + hours : "+" + hours;
+            } else {
+                // add an extra 0 if needed 
+                display_hours = (hours > -10) ? "-0" + Math.abs(hours) : hours;
+            }
+
+            mins = (mins < 10) ? "0" + mins : mins;
+            return display_hours + ":" + mins;
+        }
+
+        //onload = calculate_time_zone;
+
+    </script>--%>
+   
+     <script type="text/javascript">
+//         $(document).ready(function () {
+//             var url = window.location;
+//             $('ul.nav li a').each(function () {
+//                 if (this.href == url) {
+//                     $("ul.nav li").each(function () {
+//                         if ($(this).hasClass("active")) {
+//                             $(this).removeClass("active");
+//                         }
+//                     });
+//                     $(this).parent().parent().parent().addClass('active');
+//                 }
+//             });
+//         });
+         
+         $(document).ready(function () {
+
+             var url = window.location;
+             $('ul.nav li a').each(function () {
+                 if (this.href == url) {
+                     $("ul.nav li").each(function () {
+                         if ($(this).hasClass("active")) {
+                             $(this).removeClass("active");
+                         }
+                     });
+                     $(this).parents().addClass('active');
+                 }
+             });
+         });
+</script>
+
+     <asp:ContentPlaceHolder ID="HeadContent" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+
+<body>
+    <div id="wrapper">
+        <nav class="navbar navbar-default top-navbar" role="navigation">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+               <a class="navbar-brand" href="#">RTM <span class="lite">Reports</span></a>
+            </div>
+             
+            <ul class="nav navbar-top-links navbar-right">
+              
+                <li class="dropdown" style="visibility:visible">                    
+                    <i class=""></i><asp:Label ID="lblOnline" runat="server" Text="" Font-Bold="true" ForeColor="#77C0FD"></asp:Label>                    
+                </li>  
+               
+                <li class="dropdown" style="visibility:visible">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                        <i class="fa fa-tasks fa-fw"></i>RTM Support<i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="CreateNewTicket.aspx"><i class="fa fa-pencil-square-o"></i>Create new ticket</a>
+                        </li>
+                        <li><a href="ViewTickets.aspx"><i class="fa fa-eye"></i>View your past tickets</a>
+                        </li>
+                    </ul>
+                </li>         
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                        <i class="fa fa-user fa-fw"></i><asp:Label ID="lblUser" runat="server" Text=""></asp:Label> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="ProfileView.aspx"><i class="fa fa-user fa-fw"></i>User Profile</a>
+                        </li>
+                        <li><a href="RTMComments.aspx"><i class="fa fa-gear fa-fw"></i>Settings</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li><a href="Logout.aspx"><i class="fa fa-sign-out fa-fw"></i>Logout</a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-user -->
+                </li>
+                <!-- /.dropdown -->
+            </ul>
+            
+        </nav>
+        <!--/. NAV TOP  -->
+        <nav class="navbar-default navbar-side" role="navigation">
+            <div class="sidebar-collapse">
+                <ul class="nav" id="main-menu">
+
+                    <li id="dashboard" runat="server">
+                        <a href="DashBoard_Admin.aspx"><i class="fa fa-dashboard"></i>Dashboard</a>
+                    </li>
+                    <li id="log" runat="server" visible="false">
+                        <a href="#"><i class="fa fa-desktop"></i>User Log<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                             <li>
+                                <a  href="#">Delay<span class="fa arrow"></span></a>
+                                <ul class="nav nav-third-level">
+                                    <li><a href="UserLogMonitor.aspx">Login & Logoff</a></li>
+                                    <li><a href="DelayInstances.aspx">Delay Instances</a></li>
+                                </ul>
+                             </li>
+                             <li><a href="SystemStatus.aspx">System Status</a></li>
+                        </ul>
+                    </li>
+		           <li id="strike" runat ="server" visible="false">
+                        <a href="#"><i class="fa fa-bar-chart-o"></i>Score Card<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                           <li id ="cmp" runat="server" visible="false"><a href="CMP_ScoreCard.aspx">CMP</a></li>
+			               <li id="ems" runat="server" visible="false"><a href="#">EMS</a></li>
+			               <li id="ipv" runat="server" visible="false"><a href="IPV_ScoreCard.aspx">IPV</a></li>
+			               <li id="psl" runat="server" visible="false"><a href="PSL_ScoreCard.aspx">PSL</a></li>
+                           <li id="orders" runat="server" visible="false"><a href="Orders_ScoreCard.aspx">Orders</a></li>
+                           
+                        </ul>
+                    </li>
+                    <%--<li id="inspire" runat="server">
+                        <a href="#"><i class="fa fa-qrcode"></i>Inspire</a>
+                    </li>--%>
+                    <li id="myReports" runat="server">
+                        <a href="#"><i class="fa fa-table"></i>My Reports<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li><a href="ReportHome.aspx">Time Card</a></li>
+                            <li><a href="UtilizationReports.aspx">Utilization</a></li>
+                            <li id="expandedHours" runat="server" visible="false"><a href="ExpandedRTMHours.aspx">Expanded RTM Hours Report</a></li>
+                            <li id="details" runat="server" visible="false"><a href="DetailedReport.aspx">Task & Subtask Details</a></li>
+                            <li id="DelayEarly" runat="server" visible="false"><a href="LateInEarlyOff.aspx">Late Login & Early Logoff</a></li>
+                            <li id="internalmetrics" runat="server" visible="false"><a href="InternalMetrics.aspx">Internal Metrics</a></li>
+                            <li id="nonCompliance" runat="server" visible="false"><a href="NonComplianceReport.aspx">Non-Compliance Report</a></li>
+                            <li id="weekhoursgreaterthan40" runat="server" visible="false"><a href="WeeklyHoursReportGreaterThan40.aspx">Weekly Hours Report (>40 Hrs)</a></li>
+                            <li id="summaryClientHoursByEmployee" runat="server" visible="false"><a href="SummaryClientHoursbyEmployees.aspx">Summary Client Hours by Employees</a></li>
+                            <li id="SummaryClientHoursbyRoles" runat="server" visible="false"><a href="SummaryClientHoursbyRoles.aspx">Summary Client Hours by Roles</a></li>
+                        </ul>
+                    </li>
+                    <li id="tsheetReports" runat="server"><a href="#"><i class="fa fa-tasks"></i>Standard T-Sheet Reports<span class="fa arrow"></span></a>
+                       <ul class="nav nav-second-level">
+                           <li id="HourlyTimeCardReport" runat="server" visible="false" ><a href="HourlyTimeCardReport.aspx">Hourly TimeCard Report</a></li>
+                           <li id="HoursbyFullJobCode" runat="server" visible="false"><a href="HoursbyFullJobCode.aspx">Hours by Full Job Code</a></li>
+                            <li id="HoursbyTeam" runat="server" visible="false"><a href="HoursbyTeam.aspx">Hours by Group</a></li>
+                            <li id="HoursbyDate" runat="server" visible="false"><a href="HoursbyDate.aspx">Hours by Date</a></li>
+                            <li id="HoursByEmployee" runat="server" visible="false"><a href="HoursByEmployee.aspx">Hours by Employee</a></li>
+                            <li id="TangoeApprovals" runat="server" visible="false"><a href="TangoeApprovals.aspx">Tangoe Approvals</a></li>
+       <%--                    <li><a href="HourlyTimeCardReport.aspx">Hours by Group</a></li>
+                           <li><a href="HourlyTimeCardReport.aspx">Hours by Employee</a></li>
+                           <li><a href="HourlyTimeCardReport.aspx">Hours by Date</a></li>
+                           <li><a href="HourlyTimeCardReport.aspx">Tangoe Approvals</a></li>--%>
+                           <li id="MSPHourly" runat="server" visible="false"><a href="MSPHoursReport.aspx">MSP Hours Report</a></li>
+                           <li id="payrollSummary" runat="server" visible="false"><a href="Payroll_Hours_Summary.aspx">Payroll Hours Summary</a></li>
+                            <li id="TSheetMSPHoursReport" runat="server" visible="false"><a href="TSheetMSPHoursReport.aspx">MSP Hours Report (Before 04/01/2017)</a></li>
+                       </ul>
+                    </li>
+                    <li id="userdata" runat="server"><a href="#"><i class="fa fa-sitemap"></i>User Data<span class="fa arrow"></span></a>
+                       <ul class="nav nav-second-level">
+                          <li id="approve" runat="server" visible="false"><a href="Approve.aspx">Approval Report</a></li>             
+                          <li id="clockIn" runat="server"><a href="MyTimeCard.aspx">Clock-In/Clock-Out</a></li>
+                          <li id="addRec" runat="server" visible="false"><a href="#">Manage Time<span class="fa arrow"></span></a>
+                             <ul class="nav nav-third-level">
+                                <li id="dailyAdd" runat="server"><a href="AddRecordsNew.aspx">Daily View</a></li>
+                                <li><a href="RecordsWeeklyView.aspx">Weekly View</a></li>
+                             </ul>
+                          </li>
+                          <li id="editRec" runat="server" visible="false"><a href="EditRecords.aspx">Edit Records (Hourly/RTM widget)</a></li>
+                          <li id="addLog" runat="server" visible="false"><a href="AddLogs.aspx">Add Logs</a></li>
+                          <li id="editLog" runat="server" visible="false"><a href="EditLogs.aspx">Edit Logs</a></li>
+                          <li id="est" runat="server" visible="false"><a href="Estimate.aspx">Resource Estimate</a></li>
+				          <li id="estRep" runat="server" visible="false"><a href="EstimateReport.aspx">Estimate Report</a></li>
+				          <li id="estComp" runat="server" visible="false"><a href="EstimateCompareReport.aspx">Estimate Comparison Report</a></li>
+                          <li id="ipvDet" runat="server" visible="false"><a href="IPVDetails.aspx">IPV Details</a></li>
+                          <li id="qcDet" runat="server" visible="false"><a href="QCDetails.aspx">QC Details</a></li>
+                          <li id="strikeratedetails" runat="server" visible="false"><a href="SrikeRateReport.aspx">Strike Rate Report</a></li>
+                          <li id="cmpDet" runat="server" visible="false"><a href="CMPDetails.aspx">CMP Details</a></li>
+                          <li id="orderDet" runat="server" visible="false"><a href="OrderDeskScoreCard.aspx">Order Details</a></li>
+			              <li id="odHourlyTask" runat="server" visible="false"><a href="OrderDeskHourlyTaskReport.aspx">Hourly Task Report</a></li>
+                          <li id="newClient" runat="server" visible="false"><a href="Implimentation.aspx">New Client</a></li>
+                          <li id ="implRealTimeStatus" runat="server" visible="false"><a href="ImplRealTimeStatusReport.aspx">Real Time Status</a></li>
+                          <li id="taskDet" runat="server" visible="false"><a href="TaskDetails.aspx">Task Details</a></li>
+                          <li><a href="IncompleteRecords.aspx">Assign Client to Task</a></li>
+                          <%--<li><a href="OutOfOffice.aspx">Out of Office</a></li>--%>
+                       </ul>
+                    </li>
+
+                    <li><a href="#" id ="update" runat="server" visible="false"><i class="fa fa-gear fa-fw"></i>Settings<span class="fa arrow"></span></a>
+		               <ul class="nav nav-second-level">
+		                  <li id="schedule" runat="server" visible="false"><a href="SheduledHours.aspx">Roster</a></li>
+                          <li id="comments" runat="server" visible="false"><a href="RTMComments.aspx">Customize</a></li>
+		               </ul>
+                    </li>
+                    <li id="Account" runat="server" visible="false"><a href="#"><i class="fa fa-book"></i>Account Setup<span class="fa arrow"></span></a> 
+                       <ul class="nav nav-second-level">
+                          <li id="employeeList" runat="server" visible="false"><a href="Employee_List.aspx">Employee List</a></li>
+                          <li><a href="#">Manage Clients<span class="fa arrow"></span></a>
+                              <ul class="nav nav-third-level">
+                                  <li><a href="ManageClientsNew.aspx">Add Clients</a></li>
+              <%--                    <li><a href="ManageClientSharePoint.aspx">Add Clients (SharePoint)</a></li>--%>
+                                  <li><a href="ManageClients.aspx">View Clients</a></li>
+                              </ul>
+                          </li>
+                          <li id="manageUsersHRIS" runat="server" visible="false"><a href="ManageUsersNew.aspx">Manage Users (HRIS)</a></li>
+                          <li id="ManageUsers" runat="server" visible="false"><a href="ManageUsers.aspx">Manage Users (Manual)</a></li>
+                          
+                       </ul>
+                    </li>
+
+                    <li><a href="#" id ="EMSDB" runat="server" visible="false"><i class="fa fa-tasks"></i>EMSDB<span class="fa arrow"></span></a>
+                       <ul class="nav nav-second-level">
+                           <li id="EMSIP" runat="server" visible="false"><a href="EMSDBInvoiceProcessing.aspx">Invoice Processing</a></li>
+                           <li id="EMSQC" runat="server" visible="false"><a href="EMSDBQC.aspx">QC</a></li>
+                           <li id="EMSAdmin" runat="server" visible="false"><a href="AdminInvoiceProcessing.aspx">Admin</a></li>
+                           <li id="EMSReports" runat="server" visible="false"><a href="#">Reports</a></li>
+                       </ul>
+                    </li>
+
+                    <li><a href="#" id ="ADMReports" runat="server" visible="false"><i class="fa fa-gear fa-fw"></i>Reports<span class="fa arrow"></span></a>
+		               <ul class="nav nav-second-level">
+		                  <li><a href="#">Hours by Full Job Code/Client</a></li>
+                          <li><a href="#">Hours by Group/Team</a></li>
+                          <li><a href="#">Hours by Employee</a></li>
+                          <li><a href="#">Tangoe Approvals</a></li>
+                          <li><a href="MSPHoursReport.aspx">MSP Hours Report</a></li>
+                          <li><a href="EmployeeHoursByWeek.aspx">Employee Hour Report by Week</a></li>
+                          <li><a href="ExpandedRTMHours.aspx">Expanded RTM Hours Report</a></li>
+                          <li id="avarageHours" runat="server"><a href="AvarageHoursByClient.aspx">Average Hours By Client</a></li>
+                          <li><a href="NonComplianceReport.aspx">Non-Compliance Report</a></li>
+                          <li><a href="WeeklyHoursReportGreaterThan40.aspx">Weekly Hours Report (>40 Hrs)</a></li>
+                          <li><a href="SummaryClientHoursbyEmployees.aspx">Summary Client Hours by Employees</a></li>
+                          <li><a href="SummaryClientHoursbyRoles.aspx">Summary Client Hours by Roles</a></li>
+		               </ul>
+                    </li>
+                </ul>
+                
+            </div>
+
+        </nav>
+        <!-- /. NAV SIDE  -->
+        <div id="page-wrapper">
+            <div id="page-inner">
+               <asp:Label ID="timezone" runat="server" Text="" Font-Bold="true" Visible="false"></asp:Label>
+                <asp:ContentPlaceHolder ID="MainContent" runat="server"/>
+                
+               
+				<footer><p></p></footer>
+            </div>
+            <!-- /. PAGE INNER  -->
+        </div>
+        <!-- /. PAGE WRAPPER  -->
+    </div>
+    <!-- /. WRAPPER  -->
+    <!-- JS Scripts-->
+    <!-- jQuery Js -->
+    
+   
+    <!--<script src="assets/js/jquery-1.10.2.js"></script>-->
+    <!-- Bootstrap Js -->
+    <script src="assets/js/bootstrap.min.js"></script>
+    <!-- Metis Menu Js -->
+    <script src="assets/js/jquery.metisMenu.js"></script>
+    <!-- Morris Chart Js -->
+    <%--<script src="assets/js/morris/raphael-2.1.0.min.js"></script>
+    <script src="assets/js/morris/morris.js"></script>--%>
+    <!-- Custom Js -->
+    <script src="assets/js/custom-scripts.js"></script>
+
+
+</body>
+
+</html>
